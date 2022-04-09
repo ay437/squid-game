@@ -15,6 +15,20 @@ renderer.setClearColor(0xb7c3f3, 1);
 const light = new THREE.AmbientLight(0xffffff);
 scene.add(light);
 
+// Fixed Variables
+const start_position = 6;
+const end_position = -start_position;
+
+const createCube = (size, posX, rotY = 0, color = 0xfbc851) => {
+  const geometry = new THREE.BoxGeometry(size.w, size.h, size.d);
+  const material = new THREE.MeshBasicMaterial({ color });
+  const cube = new THREE.Mesh(geometry, material);
+  cube.position.set(posX, 0, 0);
+  cube.rotation.y = rotY;
+  scene.add(cube);
+  return cube;
+};
+
 camera.position.z = 5;
 
 const loader = new THREE.GLTFLoader();
@@ -37,6 +51,19 @@ class Doll {
     gsap.to(this.doll.rotation, { y: 0, duration: 0.45 });
   };
 }
+
+const createTrack = () => {
+  createCube(
+    { w: start_position * 2 + 0.21, h: 1.5, d: 1 },
+    0,
+    0,
+    0xe5a716
+  ).position.z = -1;
+  createCube({ w: 0.2, h: 1.5, d: 1 }, start_position, -0.4);
+  createCube({ w: 0.2, h: 1.5, d: 1 }, end_position, 0.4);
+};
+
+createTrack();
 
 let doll = new Doll();
 
