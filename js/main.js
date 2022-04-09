@@ -29,13 +29,13 @@ class Doll {
     });
   }
 
-  lookBackward() {
+  lookBackward = () => {
     gsap.to(this.doll.rotation, { y: -3.1415, duration: 0.45 });
-  }
+  };
 
-  lookForward() {
+  lookForward = () => {
     gsap.to(this.doll.rotation, { y: 0, duration: 0.45 });
-  }
+  };
 }
 
 let doll = new Doll();
