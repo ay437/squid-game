@@ -33,6 +33,10 @@ camera.position.z = 5;
 
 const loader = new THREE.GLTFLoader();
 
+const delay = (ms) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
+
 class Doll {
   constructor() {
     loader.load('../model/scene.gltf', (gltf) => {
@@ -49,6 +53,14 @@ class Doll {
 
   lookForward = () => {
     gsap.to(this.doll.rotation, { y: 0, duration: 0.45 });
+  };
+
+  start = async () => {
+    this.lookBackward();
+    await delay(Math.random() * 1000 + 1000);
+    this.lookForward();
+    await delay(Math.random() * 750 + 750);
+    this.start();
   };
 }
 
@@ -84,6 +96,10 @@ class Player {
     this.playerInfo.velocity = 0.03;
   };
 
+  stop = () => {
+    gsap.to(this.playerInfo, { velocity: 0, duration: 0.1 });
+  };
+
   update = () => {
     this.playerInfo.positionX -= this.playerInfo.velocity;
     this.player.position.x = this.playerInfo.positionX;
@@ -95,7 +111,7 @@ const player = new Player();
 let doll = new Doll();
 
 setTimeout(() => {
-  doll.lookBackward();
+  doll.start();
 }, 1000);
 
 function animate() {
@@ -112,3 +128,15 @@ function onWindowResize() {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
+
+window.addEventListener('keydown', (e) => {
+  if (e.key == 'ArrowUp') {
+    player.run();
+  }
+});
+
+window.addEventListener('keyup', (e) => {
+  if (e.key == 'ArrowUp') {
+    player.stop();
+  }
+});
